@@ -12,11 +12,10 @@
         <link rel="stylesheet" href="css/fontawesome-all.min.css">
         <link rel="stylesheet" href="css/MarkerCluster.css">
         <link rel="stylesheet" href="css/MarkerCluster.Default.css">
-        <link rel="stylesheet" href="css/leaflet-search.css">
         <link rel="stylesheet" href="css/leaflet.photon.css">
         <style>
         #map {
-            width: 1332px;
+            width: 1007px;
             height: 762px;
         }
         </style>
@@ -38,16 +37,16 @@
         <script src="js/labels.js"></script>
         <script src="js/leaflet.photon.js"></script>
         <script src="js/leaflet.markercluster.js"></script>
-        <script src="js/leaflet-search.js"></script>
         <script src="data/barrios_1.js"></script>
-        <script src="data/contenedores_verdes_2.js"></script>
-        <script src="data/comisarias_3.js"></script>
-        <script src="data/espacio_verde_publico_4.js"></script>
-        <script src="data/centros_salud_nivel_1_cesac_5.js"></script>
-        <script src="data/hospitales_6.js"></script>
-        <script src="data/centros_medicos_barriales_7.js"></script>
-        <script src="data/establecimietos_educativos1_8.js"></script>
-        <script src="data/crucessemaforizados_fixed_9.js"></script>
+        <script src="data/ContenedoresVerdes_2.js"></script>
+        <script src="data/PuntosSeguros_3.js"></script>
+        <script src="data/Comisarias_4.js"></script>
+        <script src="data/EspaciosVerdes_5.js"></script>
+        <script src="data/CesacsNivel1_6.js"></script>
+        <script src="data/Hospitales_7.js"></script>
+        <script src="data/CentrosMedicosBarriales_8.js"></script>
+        <script src="data/EstablecimientosEducativos_9.js"></script>
+        <script src="data/Semaforos_10.js"></script>
         <script>
         var highlightLayer;
         function highlightFeature(e) {
@@ -170,7 +169,7 @@
         });
         bounds_group.addLayer(layer_barrios_1);
         map.addLayer(layer_barrios_1);
-        function pop_contenedores_verdes_2(feature, layer) {
+        function pop_ContenedoresVerdes_2(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     if (typeof layer.closePopup == 'function') {
@@ -213,33 +212,137 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_contenedores_verdes_2_0() {
+        function style_ContenedoresVerdes_2_0() {
             return {
-                pane: 'pane_contenedores_verdes_2',
+                pane: 'pane_ContenedoresVerdes_2',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/ContenedoresVerdes_2.svg',
+            iconSize: [19.0, 19.0]
+        }),
                 interactive: true,
             }
         }
-        map.createPane('pane_contenedores_verdes_2');
-        map.getPane('pane_contenedores_verdes_2').style.zIndex = 402;
-        map.getPane('pane_contenedores_verdes_2').style['mix-blend-mode'] = 'normal';
-        var layer_contenedores_verdes_2 = new L.geoJson(json_contenedores_verdes_2, {
+        map.createPane('pane_ContenedoresVerdes_2');
+        map.getPane('pane_ContenedoresVerdes_2').style.zIndex = 402;
+        map.getPane('pane_ContenedoresVerdes_2').style['mix-blend-mode'] = 'normal';
+        var layer_ContenedoresVerdes_2 = new L.geoJson(json_ContenedoresVerdes_2, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_contenedores_verdes_2',
-            layerName: 'layer_contenedores_verdes_2',
-            pane: 'pane_contenedores_verdes_2',
-            onEachFeature: pop_contenedores_verdes_2,
+            dataVar: 'json_ContenedoresVerdes_2',
+            layerName: 'layer_ContenedoresVerdes_2',
+            pane: 'pane_ContenedoresVerdes_2',
+            onEachFeature: pop_ContenedoresVerdes_2,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_contenedores_verdes_2_0(feature));
+                return L.marker(latlng, style_ContenedoresVerdes_2_0(feature));
             },
         });
-        bounds_group.addLayer(layer_contenedores_verdes_2);
-        map.addLayer(layer_contenedores_verdes_2);
-        function pop_comisarias_3(feature, layer) {
+        var cluster_ContenedoresVerdes_2 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_ContenedoresVerdes_2.addLayer(layer_ContenedoresVerdes_2);
+
+        bounds_group.addLayer(layer_ContenedoresVerdes_2);
+        cluster_ContenedoresVerdes_2.addTo(map);
+        function pop_PuntosSeguros_3(feature, layer) {
+            layer.on({
+                mouseout: function(e) {
+                    if (typeof layer.closePopup == 'function') {
+                        layer.closePopup();
+                    } else {
+                        layer.eachLayer(function(feature){
+                            feature.closePopup()
+                        });
+                    }
+                },
+                mouseover: highlightFeature,
+            });
+            var popupContent = '<table>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(String(feature.properties['id']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['Name'] !== null ? autolinker.link(String(feature.properties['Name']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['description'] !== null ? autolinker.link(String(feature.properties['description']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['timestamp'] !== null ? autolinker.link(String(feature.properties['timestamp']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['begin'] !== null ? autolinker.link(String(feature.properties['begin']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['end'] !== null ? autolinker.link(String(feature.properties['end']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['altitudeMode'] !== null ? autolinker.link(String(feature.properties['altitudeMode']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['tessellate'] !== null ? autolinker.link(String(feature.properties['tessellate']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['extrude'] !== null ? autolinker.link(String(feature.properties['extrude']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['visibility'] !== null ? autolinker.link(String(feature.properties['visibility']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['drawOrder'] !== null ? autolinker.link(String(feature.properties['drawOrder']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <td colspan="2">' + (feature.properties['icon'] !== null ? autolinker.link(String(feature.properties['icon']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            var content = removeEmptyRowsFromPopupContent(popupContent, feature);
+			layer.on('popupopen', function(e) {
+				addClassToPopupIfMedia(content, e.popup);
+			});
+			layer.bindPopup(content, { maxHeight: 400 });
+        }
+
+        function style_PuntosSeguros_3_0() {
+            return {
+                pane: 'pane_PuntosSeguros_3',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/PuntosSeguros_3.svg',
+            iconSize: [31.159999999999997, 31.159999999999997]
+        }),
+                interactive: true,
+            }
+        }
+        map.createPane('pane_PuntosSeguros_3');
+        map.getPane('pane_PuntosSeguros_3').style.zIndex = 403;
+        map.getPane('pane_PuntosSeguros_3').style['mix-blend-mode'] = 'normal';
+        var layer_PuntosSeguros_3 = new L.geoJson(json_PuntosSeguros_3, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_PuntosSeguros_3',
+            layerName: 'layer_PuntosSeguros_3',
+            pane: 'pane_PuntosSeguros_3',
+            onEachFeature: pop_PuntosSeguros_3,
+            pointToLayer: function (feature, latlng) {
+                var context = {
+                    feature: feature,
+                    variables: {}
+                };
+                return L.marker(latlng, style_PuntosSeguros_3_0(feature));
+            },
+        });
+        var cluster_PuntosSeguros_3 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_PuntosSeguros_3.addLayer(layer_PuntosSeguros_3);
+
+        bounds_group.addLayer(layer_PuntosSeguros_3);
+        cluster_PuntosSeguros_3.addTo(map);
+        function pop_Comisarias_4(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     if (typeof layer.closePopup == 'function') {
@@ -288,33 +391,43 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_comisarias_3_0() {
+        function style_Comisarias_4_0() {
             return {
-                pane: 'pane_comisarias_3',
+                pane: 'pane_Comisarias_4',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/Comisarias_4.svg',
+            iconSize: [25.08, 25.08]
+        }),
                 interactive: true,
             }
         }
-        map.createPane('pane_comisarias_3');
-        map.getPane('pane_comisarias_3').style.zIndex = 403;
-        map.getPane('pane_comisarias_3').style['mix-blend-mode'] = 'normal';
-        var layer_comisarias_3 = new L.geoJson(json_comisarias_3, {
+        map.createPane('pane_Comisarias_4');
+        map.getPane('pane_Comisarias_4').style.zIndex = 404;
+        map.getPane('pane_Comisarias_4').style['mix-blend-mode'] = 'normal';
+        var layer_Comisarias_4 = new L.geoJson(json_Comisarias_4, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_comisarias_3',
-            layerName: 'layer_comisarias_3',
-            pane: 'pane_comisarias_3',
-            onEachFeature: pop_comisarias_3,
+            dataVar: 'json_Comisarias_4',
+            layerName: 'layer_Comisarias_4',
+            pane: 'pane_Comisarias_4',
+            onEachFeature: pop_Comisarias_4,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_comisarias_3_0(feature));
+                return L.marker(latlng, style_Comisarias_4_0(feature));
             },
         });
-        bounds_group.addLayer(layer_comisarias_3);
-        map.addLayer(layer_comisarias_3);
-        function pop_espacio_verde_publico_4(feature, layer) {
+        var cluster_Comisarias_4 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_Comisarias_4.addLayer(layer_Comisarias_4);
+
+        bounds_group.addLayer(layer_Comisarias_4);
+        cluster_Comisarias_4.addTo(map);
+        function pop_EspaciosVerdes_5(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     if (typeof layer.closePopup == 'function') {
@@ -369,7 +482,7 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        var pattern_espacio_verde_publico_4_0 = new L.StripePattern({
+        var pattern_EspaciosVerdes_5_0 = new L.StripePattern({
             weight: 0.3,
             spaceWeight: 2.0,
             color: '#4daf4a',
@@ -377,19 +490,19 @@
             spaceOpacity: 0,
             angle: 225
         });
-        pattern_espacio_verde_publico_4_0.addTo(map);
-        function style_espacio_verde_publico_4_0() {
+        pattern_EspaciosVerdes_5_0.addTo(map);
+        function style_EspaciosVerdes_5_0() {
             return {
-                pane: 'pane_espacio_verde_publico_4',
+                pane: 'pane_EspaciosVerdes_5',
                 stroke: false,
                 fillOpacity: 1,
-                fillPattern: pattern_espacio_verde_publico_4_0,
+                fillPattern: pattern_EspaciosVerdes_5_0,
                 interactive: true,
             }
         }
-        function style_espacio_verde_publico_4_1() {
+        function style_EspaciosVerdes_5_1() {
             return {
-                pane: 'pane_espacio_verde_publico_4',
+                pane: 'pane_EspaciosVerdes_5',
                 opacity: 1,
                 color: 'rgba(77,175,74,1.0)',
                 dashArray: '',
@@ -400,21 +513,21 @@
                 interactive: true,
             }
         }
-        map.createPane('pane_espacio_verde_publico_4');
-        map.getPane('pane_espacio_verde_publico_4').style.zIndex = 404;
-        map.getPane('pane_espacio_verde_publico_4').style['mix-blend-mode'] = 'normal';
-        var layer_espacio_verde_publico_4 = new L.geoJson.multiStyle(json_espacio_verde_publico_4, {
+        map.createPane('pane_EspaciosVerdes_5');
+        map.getPane('pane_EspaciosVerdes_5').style.zIndex = 405;
+        map.getPane('pane_EspaciosVerdes_5').style['mix-blend-mode'] = 'normal';
+        var layer_EspaciosVerdes_5 = new L.geoJson.multiStyle(json_EspaciosVerdes_5, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_espacio_verde_publico_4',
-            layerName: 'layer_espacio_verde_publico_4',
-            pane: 'pane_espacio_verde_publico_4',
-            onEachFeature: pop_espacio_verde_publico_4,
-            styles: [style_espacio_verde_publico_4_0,style_espacio_verde_publico_4_1,]
+            dataVar: 'json_EspaciosVerdes_5',
+            layerName: 'layer_EspaciosVerdes_5',
+            pane: 'pane_EspaciosVerdes_5',
+            onEachFeature: pop_EspaciosVerdes_5,
+            styles: [style_EspaciosVerdes_5_0,style_EspaciosVerdes_5_1,]
         });
-        bounds_group.addLayer(layer_espacio_verde_publico_4);
-        map.addLayer(layer_espacio_verde_publico_4);
-        function pop_centros_salud_nivel_1_cesac_5(feature, layer) {
+        bounds_group.addLayer(layer_EspaciosVerdes_5);
+        map.addLayer(layer_EspaciosVerdes_5);
+        function pop_CesacsNivel1_6(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     if (typeof layer.closePopup == 'function') {
@@ -472,33 +585,43 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_centros_salud_nivel_1_cesac_5_0() {
+        function style_CesacsNivel1_6_0() {
             return {
-                pane: 'pane_centros_salud_nivel_1_cesac_5',
+                pane: 'pane_CesacsNivel1_6',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/CesacsNivel1_6.svg',
+            iconSize: [19.0, 19.0]
+        }),
                 interactive: true,
             }
         }
-        map.createPane('pane_centros_salud_nivel_1_cesac_5');
-        map.getPane('pane_centros_salud_nivel_1_cesac_5').style.zIndex = 405;
-        map.getPane('pane_centros_salud_nivel_1_cesac_5').style['mix-blend-mode'] = 'normal';
-        var layer_centros_salud_nivel_1_cesac_5 = new L.geoJson(json_centros_salud_nivel_1_cesac_5, {
+        map.createPane('pane_CesacsNivel1_6');
+        map.getPane('pane_CesacsNivel1_6').style.zIndex = 406;
+        map.getPane('pane_CesacsNivel1_6').style['mix-blend-mode'] = 'normal';
+        var layer_CesacsNivel1_6 = new L.geoJson(json_CesacsNivel1_6, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_centros_salud_nivel_1_cesac_5',
-            layerName: 'layer_centros_salud_nivel_1_cesac_5',
-            pane: 'pane_centros_salud_nivel_1_cesac_5',
-            onEachFeature: pop_centros_salud_nivel_1_cesac_5,
+            dataVar: 'json_CesacsNivel1_6',
+            layerName: 'layer_CesacsNivel1_6',
+            pane: 'pane_CesacsNivel1_6',
+            onEachFeature: pop_CesacsNivel1_6,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_centros_salud_nivel_1_cesac_5_0(feature));
+                return L.marker(latlng, style_CesacsNivel1_6_0(feature));
             },
         });
-        bounds_group.addLayer(layer_centros_salud_nivel_1_cesac_5);
-        map.addLayer(layer_centros_salud_nivel_1_cesac_5);
-        function pop_hospitales_6(feature, layer) {
+        var cluster_CesacsNivel1_6 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_CesacsNivel1_6.addLayer(layer_CesacsNivel1_6);
+
+        bounds_group.addLayer(layer_CesacsNivel1_6);
+        cluster_CesacsNivel1_6.addTo(map);
+        function pop_Hospitales_7(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     if (typeof layer.closePopup == 'function') {
@@ -514,9 +637,6 @@
             var popupContent = '<table>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['id'] !== null ? autolinker.link(String(feature.properties['id']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
-                    </tr>\
-                    <tr>\
-                        <td colspan="2">' + (feature.properties['fna'] !== null ? autolinker.link(String(feature.properties['fna']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
                     </tr>\
                     <tr>\
                         <td colspan="2">' + (feature.properties['gna'] !== null ? autolinker.link(String(feature.properties['gna']).replace(/'/g, '\'').toLocaleString()) : '') + '</td>\
@@ -562,33 +682,43 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_hospitales_6_0() {
+        function style_Hospitales_7_0() {
             return {
-                pane: 'pane_hospitales_6',
+                pane: 'pane_Hospitales_7',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/Hospitales_7.svg',
+            iconSize: [19.0, 19.0]
+        }),
                 interactive: true,
             }
         }
-        map.createPane('pane_hospitales_6');
-        map.getPane('pane_hospitales_6').style.zIndex = 406;
-        map.getPane('pane_hospitales_6').style['mix-blend-mode'] = 'normal';
-        var layer_hospitales_6 = new L.geoJson(json_hospitales_6, {
+        map.createPane('pane_Hospitales_7');
+        map.getPane('pane_Hospitales_7').style.zIndex = 407;
+        map.getPane('pane_Hospitales_7').style['mix-blend-mode'] = 'normal';
+        var layer_Hospitales_7 = new L.geoJson(json_Hospitales_7, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_hospitales_6',
-            layerName: 'layer_hospitales_6',
-            pane: 'pane_hospitales_6',
-            onEachFeature: pop_hospitales_6,
+            dataVar: 'json_Hospitales_7',
+            layerName: 'layer_Hospitales_7',
+            pane: 'pane_Hospitales_7',
+            onEachFeature: pop_Hospitales_7,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_hospitales_6_0(feature));
+                return L.marker(latlng, style_Hospitales_7_0(feature));
             },
         });
-        bounds_group.addLayer(layer_hospitales_6);
-        map.addLayer(layer_hospitales_6);
-        function pop_centros_medicos_barriales_7(feature, layer) {
+        var cluster_Hospitales_7 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_Hospitales_7.addLayer(layer_Hospitales_7);
+
+        bounds_group.addLayer(layer_Hospitales_7);
+        cluster_Hospitales_7.addTo(map);
+        function pop_CentrosMedicosBarriales_8(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     if (typeof layer.closePopup == 'function') {
@@ -643,43 +773,43 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_centros_medicos_barriales_7_0() {
+        function style_CentrosMedicosBarriales_8_0() {
             return {
-                pane: 'pane_centros_medicos_barriales_7',
-                radius: 4.0,
-                opacity: 1,
-                color: 'rgba(35,35,35,1.0)',
-                dashArray: '',
-                lineCap: 'butt',
-                lineJoin: 'miter',
-                weight: 1,
-                fill: true,
-                fillOpacity: 1,
-                fillColor: 'rgba(243,166,178,1.0)',
+                pane: 'pane_CentrosMedicosBarriales_8',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/CentrosMedicosBarriales_8.svg',
+            iconSize: [7.6, 7.6]
+        }),
                 interactive: true,
             }
         }
-        map.createPane('pane_centros_medicos_barriales_7');
-        map.getPane('pane_centros_medicos_barriales_7').style.zIndex = 407;
-        map.getPane('pane_centros_medicos_barriales_7').style['mix-blend-mode'] = 'normal';
-        var layer_centros_medicos_barriales_7 = new L.geoJson(json_centros_medicos_barriales_7, {
+        map.createPane('pane_CentrosMedicosBarriales_8');
+        map.getPane('pane_CentrosMedicosBarriales_8').style.zIndex = 408;
+        map.getPane('pane_CentrosMedicosBarriales_8').style['mix-blend-mode'] = 'normal';
+        var layer_CentrosMedicosBarriales_8 = new L.geoJson(json_CentrosMedicosBarriales_8, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_centros_medicos_barriales_7',
-            layerName: 'layer_centros_medicos_barriales_7',
-            pane: 'pane_centros_medicos_barriales_7',
-            onEachFeature: pop_centros_medicos_barriales_7,
+            dataVar: 'json_CentrosMedicosBarriales_8',
+            layerName: 'layer_CentrosMedicosBarriales_8',
+            pane: 'pane_CentrosMedicosBarriales_8',
+            onEachFeature: pop_CentrosMedicosBarriales_8,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_centros_medicos_barriales_7_0(feature));
+                return L.marker(latlng, style_CentrosMedicosBarriales_8_0(feature));
             },
         });
-        bounds_group.addLayer(layer_centros_medicos_barriales_7);
-        map.addLayer(layer_centros_medicos_barriales_7);
-        function pop_establecimietos_educativos1_8(feature, layer) {
+        var cluster_CentrosMedicosBarriales_8 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_CentrosMedicosBarriales_8.addLayer(layer_CentrosMedicosBarriales_8);
+
+        bounds_group.addLayer(layer_CentrosMedicosBarriales_8);
+        cluster_CentrosMedicosBarriales_8.addTo(map);
+        function pop_EstablecimientosEducativos_9(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     if (typeof layer.closePopup == 'function') {
@@ -746,33 +876,43 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_establecimietos_educativos1_8_0() {
+        function style_EstablecimientosEducativos_9_0() {
             return {
-                pane: 'pane_establecimietos_educativos1_8',
+                pane: 'pane_EstablecimientosEducativos_9',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/EstablecimientosEducativos_9.svg',
+            iconSize: [19.0, 19.0]
+        }),
                 interactive: true,
             }
         }
-        map.createPane('pane_establecimietos_educativos1_8');
-        map.getPane('pane_establecimietos_educativos1_8').style.zIndex = 408;
-        map.getPane('pane_establecimietos_educativos1_8').style['mix-blend-mode'] = 'normal';
-        var layer_establecimietos_educativos1_8 = new L.geoJson(json_establecimietos_educativos1_8, {
+        map.createPane('pane_EstablecimientosEducativos_9');
+        map.getPane('pane_EstablecimientosEducativos_9').style.zIndex = 409;
+        map.getPane('pane_EstablecimientosEducativos_9').style['mix-blend-mode'] = 'normal';
+        var layer_EstablecimientosEducativos_9 = new L.geoJson(json_EstablecimientosEducativos_9, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_establecimietos_educativos1_8',
-            layerName: 'layer_establecimietos_educativos1_8',
-            pane: 'pane_establecimietos_educativos1_8',
-            onEachFeature: pop_establecimietos_educativos1_8,
+            dataVar: 'json_EstablecimientosEducativos_9',
+            layerName: 'layer_EstablecimientosEducativos_9',
+            pane: 'pane_EstablecimientosEducativos_9',
+            onEachFeature: pop_EstablecimientosEducativos_9,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_establecimietos_educativos1_8_0(feature));
+                return L.marker(latlng, style_EstablecimientosEducativos_9_0(feature));
             },
         });
-        bounds_group.addLayer(layer_establecimietos_educativos1_8);
-        map.addLayer(layer_establecimietos_educativos1_8);
-        function pop_crucessemaforizados_fixed_9(feature, layer) {
+        var cluster_EstablecimientosEducativos_9 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+            spiderfyDistanceMultiplier: 2});
+        cluster_EstablecimientosEducativos_9.addLayer(layer_EstablecimientosEducativos_9);
+
+        bounds_group.addLayer(layer_EstablecimientosEducativos_9);
+        cluster_EstablecimientosEducativos_9.addTo(map);
+        function pop_Semaforos_10(feature, layer) {
             layer.on({
                 mouseout: function(e) {
                     if (typeof layer.closePopup == 'function') {
@@ -854,47 +994,54 @@
 			layer.bindPopup(content, { maxHeight: 400 });
         }
 
-        function style_crucessemaforizados_fixed_9_0() {
+        function style_Semaforos_10_0() {
             return {
-                pane: 'pane_crucessemaforizados_fixed_9',
+                pane: 'pane_Semaforos_10',
+        rotationAngle: 0.0,
+        rotationOrigin: 'center center',
+        icon: L.icon({
+            iconUrl: 'markers/Semaforos_10.svg',
+            iconSize: [22.799999999999997, 22.799999999999997]
+        }),
                 interactive: true,
             }
         }
-        map.createPane('pane_crucessemaforizados_fixed_9');
-        map.getPane('pane_crucessemaforizados_fixed_9').style.zIndex = 409;
-        map.getPane('pane_crucessemaforizados_fixed_9').style['mix-blend-mode'] = 'normal';
-        var layer_crucessemaforizados_fixed_9 = new L.geoJson(json_crucessemaforizados_fixed_9, {
+        map.createPane('pane_Semaforos_10');
+        map.getPane('pane_Semaforos_10').style.zIndex = 410;
+        map.getPane('pane_Semaforos_10').style['mix-blend-mode'] = 'normal';
+        var layer_Semaforos_10 = new L.geoJson(json_Semaforos_10, {
             attribution: '',
             interactive: true,
-            dataVar: 'json_crucessemaforizados_fixed_9',
-            layerName: 'layer_crucessemaforizados_fixed_9',
-            pane: 'pane_crucessemaforizados_fixed_9',
-            onEachFeature: pop_crucessemaforizados_fixed_9,
+            dataVar: 'json_Semaforos_10',
+            layerName: 'layer_Semaforos_10',
+            pane: 'pane_Semaforos_10',
+            onEachFeature: pop_Semaforos_10,
             pointToLayer: function (feature, latlng) {
                 var context = {
                     feature: feature,
                     variables: {}
                 };
-                return L.circleMarker(latlng, style_crucessemaforizados_fixed_9_0(feature));
+                return L.marker(latlng, style_Semaforos_10_0(feature));
             },
         });
-        var cluster_crucessemaforizados_fixed_9 = new L.MarkerClusterGroup({showCoverageOnHover: false,
+        var cluster_Semaforos_10 = new L.MarkerClusterGroup({showCoverageOnHover: false,
             spiderfyDistanceMultiplier: 2});
-        cluster_crucessemaforizados_fixed_9.addLayer(layer_crucessemaforizados_fixed_9);
+        cluster_Semaforos_10.addLayer(layer_Semaforos_10);
 
-        bounds_group.addLayer(layer_crucessemaforizados_fixed_9);
-        cluster_crucessemaforizados_fixed_9.addTo(map);
+        bounds_group.addLayer(layer_Semaforos_10);
+        cluster_Semaforos_10.addTo(map);
         var overlaysTree = [
-            {label: '<img src="legend/crucessemaforizados_fixed_9.png" /> cruces-semaforizados_fixed', layer: cluster_crucessemaforizados_fixed_9},
-            {label: '<img src="legend/establecimietos_educativos1_8.png" /> establecimietos_educativos (1)', layer: layer_establecimietos_educativos1_8},
-            {label: '<img src="legend/centros_medicos_barriales_7.png" /> centros_medicos_barriales', layer: layer_centros_medicos_barriales_7},
-            {label: '<img src="legend/hospitales_6.png" /> hospitales', layer: layer_hospitales_6},
-            {label: '<img src="legend/centros_salud_nivel_1_cesac_5.png" /> centros_salud_nivel_1_cesac', layer: layer_centros_salud_nivel_1_cesac_5},
-            {label: '<img src="legend/espacio_verde_publico_4.png" /> espacio_verde_publico', layer: layer_espacio_verde_publico_4},
-            {label: '<img src="legend/comisarias_3.png" /> comisarias', layer: layer_comisarias_3},
-            {label: '<img src="legend/contenedores_verdes_2.png" /> contenedores_verdes', layer: layer_contenedores_verdes_2},
+            {label: '<img src="legend/Semaforos_10.png" /> Semaforos', layer: cluster_Semaforos_10},
+            {label: '<img src="legend/EstablecimientosEducativos_9.png" /> Establecimientos Educativos', layer: cluster_EstablecimientosEducativos_9},
+            {label: '<img src="legend/CentrosMedicosBarriales_8.png" /> Centros Medicos Barriales', layer: cluster_CentrosMedicosBarriales_8},
+            {label: '<img src="legend/Hospitales_7.png" /> Hospitales', layer: cluster_Hospitales_7},
+            {label: '<img src="legend/CesacsNivel1_6.png" /> Cesacs Nivel 1', layer: cluster_CesacsNivel1_6},
+            {label: '<img src="legend/EspaciosVerdes_5.png" /> Espacios Verdes', layer: layer_EspaciosVerdes_5},
+            {label: '<img src="legend/Comisarias_4.png" /> Comisarias', layer: cluster_Comisarias_4},
+            {label: '<img src="legend/PuntosSeguros_3.png" /> Puntos Seguros', layer: cluster_PuntosSeguros_3},
+            {label: '<img src="legend/ContenedoresVerdes_2.png" /> Contenedores Verdes', layer: cluster_ContenedoresVerdes_2},
             {label: '<img src="legend/barrios_1.png" /> barrios', layer: layer_barrios_1},
-            {label: "OpenStreetMap", layer: layer_OpenStreetMap_0},]
+            {label: "OpenStreetMap", layer: layer_OpenStreetMap_0, radioGroup: 'bm' },]
         var lay = L.control.layers.tree(null, overlaysTree,{
             //namedToggle: true,
             //selectorBack: false,
@@ -906,16 +1053,16 @@
         });
         lay.addTo(map);
         setBounds();
-        map.addControl(new L.Control.Search({
-            layer: cluster_barrios_1,
-            initial: false,
-            hideMarkerOnCollapse: true,
-            propertyName: 'nombre'}));
-        if (typeof url === 'undefined') {
-            document.getElementsByClassName('search-button')[0].className += ' fa fa-binoculars';
-        } else {
-            document.getElementsByClassName('search-button')[1].className += ' fa fa-binoculars';
-        }
+        resetLabels([layer_EspaciosVerdes_5]);
+        map.on("zoomend", function(){
+            resetLabels([layer_EspaciosVerdes_5]);
+        });
+        map.on("layeradd", function(){
+            resetLabels([layer_EspaciosVerdes_5]);
+        });
+        map.on("layerremove", function(){
+            resetLabels([layer_EspaciosVerdes_5]);
+        });
         </script>
     </body>
 </html>
